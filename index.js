@@ -27,7 +27,7 @@ async function init() {
     console.log('Download: ', downloadResponse);
 
     let xmlOutput = await fs.readFile(`${downloadResponse.downloadPath}/reports/output.xml`);
-    let json = JSON.parse(parser.toJson(data, {reversible: true}));
+    let json = JSON.parse(parser.toJson(xmlOutput, {reversible: true}));
 
     console.log(json);
   
