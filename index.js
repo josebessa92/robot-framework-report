@@ -6,8 +6,6 @@ const artifact = require('@actions/artifact');
 
 async function init() {
   try {
-    let json = '';
-    
     const artifactClient = artifact.create();
 
     // `who-to-greet` input defined in action metadata file
@@ -28,15 +26,10 @@ async function init() {
     
     let xmlOutput = await fs.readFile(`${downloadResponse.downloadPath}/reports/output.xml`);
     console.log('XML lido com sucesso');
+    console.log('XML', xmlOutput);
 
-    if(parser.validate(xmlOutput) === true) { //optional (it'll return an object in case it's not valid)
-      console.log('XML Valido');
-      jsonObj = parser.parse(xmlOutput);
-      console.log('JSON convertido com sucesso', jsonObj);
-    }
-    else {
-      core.setFailed('XML Invalido');
-    }
+    let json = parser.parse(xmlOutput);
+    console.log('JSON convertido com sucesso', json);
   
     // fs.readFile( `${downloadResponse.downloadPath}/output.xml`, function(err, data) {
     //   // var json = JSON.parse(parser.toJson(data, {reversible: true}));
