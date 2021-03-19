@@ -24,7 +24,7 @@ async function init() {
     const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName);
     console.log('Download: ', downloadResponse);
     
-    let xmlOutput = await fs.readFile(`${downloadResponse.downloadPath}/reports/output.xml`);
+    let xmlOutput = await fs.readFile(`${downloadResponse.downloadPath}/reports/output.xml`, 'utf8');
     console.log('XML lido com sucesso');
     console.log('XML', xmlOutput);
 
