@@ -1,10 +1,21 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Robot Framework Report - by Bessa'
+description: 'Report your Robot Framework Tests in your PRs'
 inputs:
-  who-to-greet:  # id da entrada
-    description: 'Who to greet'
+  report-path:  
+    description: 'Your result reports path'
     required: true
-    default: 'World'
+  access-token:  
+    description: 'Github Access Token'
+    required: true
+  repo-owner: 
+    description: 'Repository Owner'
+    required: true
+  sha: 
+    description: 'Commit SHA ID'
+    required: true
+  repository: 
+    description: 'Repository'
+    required: true  
 outputs:
   time: # id da saída
     description: 'The time we greeted you'
