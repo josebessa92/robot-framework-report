@@ -1,9 +1,4 @@
-const fs = require('fs');
-const parser = require('xml2json');
-
 const core = require('@actions/core');
-const github = require('@actions/github');
-const artifact = require('@actions/artifact');
 
 async function init() {
   try {
@@ -24,14 +19,14 @@ async function init() {
     const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName, '/reports', { createArtifactFolder: false });
     console.log('Download: ', downloadResponse);
   
-    fs.readFile( `${downloadResponse.downloadPath}/output.xml`, function(err, data) {
-      // var json = JSON.parse(parser.toJson(data, {reversible: true}));
-      console.log('reading report xml: ' + data);
-      // console.log('reading report json: ' + json);
-      const time = (new Date()).toTimeString();
-      core.setOutput("time", time);
+    // fs.readFile( `${downloadResponse.downloadPath}/output.xml`, function(err, data) {
+    //   // var json = JSON.parse(parser.toJson(data, {reversible: true}));
+    //   console.log('reading report xml: ' + data);
+    //   // console.log('reading report json: ' + json);
+    //   const time = (new Date()).toTimeString();
+    //   core.setOutput("time", time);
       
-    });
+    // });
     
     
     
