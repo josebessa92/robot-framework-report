@@ -21,8 +21,9 @@ try {
 
 
   fs.readFile( `${reportPath}/output.xml`, function(err, data) {
-    var json = JSON.parse(parser.toJson(data, {reversible: true}));
-    console.log('reading report: ' + json);
+    // var json = JSON.parse(parser.toJson(data, {reversible: true}));
+    console.log('reading report xml: ' + data);
+    // console.log('reading report json: ' + json);
   });
   
   
