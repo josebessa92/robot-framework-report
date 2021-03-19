@@ -21,6 +21,7 @@ try {
   console.log(`Hello ${reportArtifactName}!`);
 
   const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName, '/reports', { createArtifactFolder: false });
+  console.log('Download: ', downloadResponse);
 
   fs.readFile( `${downloadResponse.downloadPath}/output.xml`, function(err, data) {
     // var json = JSON.parse(parser.toJson(data, {reversible: true}));
