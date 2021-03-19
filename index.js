@@ -1,3 +1,5 @@
+const fs = require('fs').promises;
+
 const core = require('@actions/core');
 const artifact = require('@actions/artifact');
 
@@ -22,6 +24,9 @@ async function init() {
   
     const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName);
     console.log('Download: ', downloadResponse);
+
+    let xmlOutput = await fs.readFile(`${downloadResponse.downloadPath}/reports/output.xml`);
+    console.log(xmlOutput);
   
     // fs.readFile( `${downloadResponse.downloadPath}/output.xml`, function(err, data) {
     //   // var json = JSON.parse(parser.toJson(data, {reversible: true}));
