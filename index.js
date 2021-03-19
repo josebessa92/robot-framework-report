@@ -20,7 +20,7 @@ async function init() {
     console.log(`Hello ${repositoryOwner}!`);
     console.log(`Hello ${reportArtifactName}!`);
   
-    const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName, '/reports', { createArtifactFolder: false });
+    const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName);
     console.log('Download: ', downloadResponse);
   
     // fs.readFile( `${downloadResponse.downloadPath}/output.xml`, function(err, data) {
