@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const parser = require('xml2json');
 
 const core = require('@actions/core');
 const artifact = require('@actions/artifact');
@@ -26,7 +27,9 @@ async function init() {
     console.log('Download: ', downloadResponse);
 
     let xmlOutput = await fs.readFile(`${downloadResponse.downloadPath}/reports/output.xml`);
-    console.log(xmlOutput);
+    let json = JSON.parse(parser.toJson(data, {reversible: true}));
+
+    console.log(json);
   
     // fs.readFile( `${downloadResponse.downloadPath}/output.xml`, function(err, data) {
     //   // var json = JSON.parse(parser.toJson(data, {reversible: true}));
