@@ -30,6 +30,7 @@ async function init() {
     console.log('XML lido com sucesso');
 
     if(parser.validate(xmlOutput) === true) { //optional (it'll return an object in case it's not valid)
+      console.log('XML Valido');
       jsonObj = parser.parse(xmlOutput);
       console.log('JSON convertido com sucesso', jsonObj);
     }
