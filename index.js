@@ -1,11 +1,12 @@
 const fs = require('fs').promises;
-const parser = require('xml2json');
+const parser = require('fast-xml-parser');
 
 const core = require('@actions/core');
 const artifact = require('@actions/artifact');
 
 async function init() {
   try {
+    let json = '';
     
     const artifactClient = artifact.create();
 
@@ -15,21 +16,26 @@ async function init() {
     const accessToken = core.getInput('access-token');
     const repositoryOwner = core.getInput('repo-owner');
     const reportArtifactName = core.getInput('report-artifact-name');
-  
-  
+
     console.log(`Hello ${sha}!`);
     console.log(`Hello ${repository}!`);
     console.log(`Hello ${accessToken}!`);
     console.log(`Hello ${repositoryOwner}!`);
     console.log(`Hello ${reportArtifactName}!`);
-  
+    
     const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName);
     console.log('Download: ', downloadResponse);
-
+    
     let xmlOutput = await fs.readFile(`${downloadResponse.downloadPath}/reports/output.xml`);
-    let json = parser.toJson(xmlOutput);
+    console.log('XML lido com sucesso');
 
-    console.log(json);
+    if(parser.validate(xmlOutput) === true) { //optional (it'll return an object in case it's not valid)
+      jsonObj = parser.parse(xmlOutput);
+      console.log('JSON convertido com sucesso', jsonObj);
+    }
+    else {
+      core.setFailed('XML Invalido');
+    }
   
     // fs.readFile( `${downloadResponse.downloadPath}/output.xml`, function(err, data) {
     //   // var json = JSON.parse(parser.toJson(data, {reversible: true}));
