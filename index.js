@@ -1,7 +1,11 @@
 const core = require('@actions/core');
+const artifact = require('@actions/artifact');
 
 async function init() {
   try {
+    
+    const artifactClient = artifact.create();
+
     // `who-to-greet` input defined in action metadata file
     const sha = core.getInput('sha');
     const repository = core.getInput('repository');
