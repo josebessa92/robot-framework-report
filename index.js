@@ -1,4 +1,5 @@
 const fs = require('fs');
+const parser = require('xml2json');
 
 const core = require('@actions/core');
 const github = require('@actions/github');
