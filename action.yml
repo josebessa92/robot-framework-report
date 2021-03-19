@@ -1,8 +1,8 @@
 name: 'Robot Framework Report - by Bessa'
 description: 'Report your Robot Framework Tests in your PRs'
 inputs:
-  report-path:  
-    description: 'Your result reports path'
+  report-artifact-name:  
+    description: 'Your result reports artifact'
     required: true
   access-token:  
     description: 'Github Access Token'
