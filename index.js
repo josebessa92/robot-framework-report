@@ -1,46 +1,74 @@
 const fs = require('fs').promises;
-const parser = require('fast-xml-parser');
+const xml2js = require('xml2js');
 
 const core = require('@actions/core');
+const github = require('@actions/github');
 const artifact = require('@actions/artifact');
 
 async function init() {
   try {
-    const artifactClient = artifact.create();
-
-    // `who-to-greet` input defined in action metadata file
-    const sha = core.getInput('sha');
+    const commitSha = core.getInput('commit-sha');
     const repository = core.getInput('repository');
     const accessToken = core.getInput('access-token');
     const repositoryOwner = core.getInput('repo-owner');
     const reportArtifactName = core.getInput('report-artifact-name');
-
-    console.log(`Hello ${sha}!`);
-    console.log(`Hello ${repository}!`);
-    console.log(`Hello ${accessToken}!`);
-    console.log(`Hello ${repositoryOwner}!`);
-    console.log(`Hello ${reportArtifactName}!`);
+    
+    const artifactClient = artifact.create();
+    const octokit = github.getOctokit(accessToken);
     
     const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName);
     console.log('Download: ', downloadResponse);
     
     let xmlOutput = await fs.readFile(`${downloadResponse.downloadPath}/reports/output.xml`, 'utf8');
+    // let xmlOutput = await fs.readFile(`./reports/output.xml`, 'utf8');
     console.log('XML lido com sucesso');
-    console.log('XML', xmlOutput);
 
-    let json = parser.parse(xmlOutput);
-    console.log('JSON convertido com sucesso', json);
-  
-    // fs.readFile( `${downloadResponse.downloadPath}/output.xml`, function(err, data) {
-    //   // var json = JSON.parse(parser.toJson(data, {reversible: true}));
-    //   console.log('reading report xml: ' + data);
-    //   // console.log('reading report json: ' + json);
-    //   const time = (new Date()).toTimeString();
-    //   core.setOutput("time", time);
-      
-    // });
-    
-    
+    let bodyComment = `
+      ### Summary Results
+      :tada: Passed {{.Passed}} / {{.Total}}
+      :fire: Failed {{.Failed}} / {{.Total}}
+
+      ### Executed Tests
+
+    `;
+
+    var parser = new xml2js.Parser();
+    parser.parseString(xmlOutput, function (err, result) {
+      const mainSuite = result.robot.suite[0].suite[0].suite[0].suite[0];
+
+      for (let index = 0; index < mainSuite.suite.length; index++) {
+        const parentSuite = mainSuite.suite[index];
+        const parentSuiteName = parentSuite.$.name;
+        const parentSuiteTestStatus = parentSuite.status[0].$.status;
+
+        bodyComment += `
+          ###### ${parentSuiteName} - ${parentSuiteTestStatus == 'FAIL' ? ':x:' : ':heavy_check_mark:' }
+        `;
+        
+        bodyComment += `
+          | Name | Result |
+          | --- | --- |
+        `;
+        for (let childSuiteIndex = 0; childSuiteIndex < parentSuite.test.length; childSuiteIndex++) {
+          const childSuite = parentSuite.test[childSuiteIndex];
+          const childSuiteName = childSuite.$.name;
+          const childSuiteTestStatus = childSuite.status[0].$.status;
+
+          bodyComment += `
+            | ${ childSuiteName } | ${ childSuiteTestStatus } |
+          `;
+        }
+      }
+    });
+
+    console.log(bodyComment);
+
+    octokit.repos.createCommitComment({
+      repositoryOwner,
+      repository,
+      commitSha,
+      bodyComment,
+    });
     
   } catch (error) {
     core.setFailed(error.message);

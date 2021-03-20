@@ -10,7 +10,7 @@ inputs:
   repo-owner: 
     description: 'Repository Owner'
     required: true
-  sha: 
+  commit-sha: 
     description: 'Commit SHA ID'
     required: true
   repository: 
