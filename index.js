@@ -64,10 +64,10 @@ async function init() {
     console.log(bodyComment);
 
     octokit.repos.createCommitComment({
-      repositoryOwner,
-      repository,
-      commitSha,
-      bodyComment,
+      owner: repositoryOwner,
+      repo: repository,
+      commit_sha: commitSha,
+      body: bodyComment
     });
     
   } catch (error) {
