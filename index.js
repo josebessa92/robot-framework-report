@@ -29,6 +29,10 @@ async function init() {
     bodyComment += ':fire: Failed {{.Failed}} / {{.Total}}\n';
     bodyComment += '### Executed Tests\n';
 
+    let totalCenarios,
+        passedCenarios,
+        failedCenarios = 0;
+    
     var parser = new xml2js.Parser();
     parser.parseString(xmlOutput, function (err, result) {
       const mainSuite = result.robot.suite[0].suite[0].suite[0].suite[0];
@@ -38,7 +42,7 @@ async function init() {
         const parentSuiteName = parentSuite.$.name;
         const parentSuiteTestStatus = parentSuite.status[0].$.status;
 
-        bodyComment += `###### ${parentSuiteName} - ${parentSuiteTestStatus == 'FAIL' ? ':x:' : ':heavy_check_mark:' }\n`;
+        bodyComment += `##### ${parentSuiteName} ${parentSuiteTestStatus == 'FAIL' ? ':x:' : ':heavy_check_mark:' }\n`;
         
         bodyComment += '| Name | Result |\n';
         bodyComment += '| --- | --- |\n';
@@ -47,11 +51,19 @@ async function init() {
           const childSuite = parentSuite.test[childSuiteIndex];
           const childSuiteName = childSuite.$.name;
           const childSuiteTestStatus = childSuite.status[0].$.status;
-
-          bodyComment += `| ${ childSuiteName } | ${ childSuiteTestStatus } |\n`;
+          
+          bodyComment += `| ${ childSuiteName } | ${ childSuiteTestStatus } ${childSuiteTestStatus == 'FAIL' ? ':x:' : ':heavy_check_mark:' } |\n`;
+          
+          childSuiteTestStatus == 'PASS' ? passedCenarios++ : failedCenarios++;
+          totalCenarios++;
         }
       }
     });
+
+    bodyComment = bodyComment.replace('{{.Passed}}', passedCenarios);
+    bodyComment = bodyComment.replace('{{.Total}}', totalCenarios);
+    bodyComment = bodyComment.replace('{{.Failed}}', failedCenarios);
+    bodyComment = bodyComment.replace('{{.Total}}', totalCenarios);
 
     const response = await octokit.issues.createComment({
       owner: repositoryOwner,
