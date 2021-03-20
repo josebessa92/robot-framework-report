@@ -17,8 +17,8 @@ inputs:
     description: 'Repository'
     required: true  
 outputs:
-  time: # id da saída
-    description: 'The time we greeted you'
+  robot-result: # id da saída
+    description: 'Robot Results'
 runs:
   using: 'node12'
   main: 'index.js'

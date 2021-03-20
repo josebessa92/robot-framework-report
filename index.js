@@ -61,14 +61,14 @@ async function init() {
       }
     });
 
-    console.log(bodyComment);
-
-    octokit.repos.createCommitComment({
+    let result = await octokit.repos.createCommitComment({
       owner: repositoryOwner,
       repo: repository,
       commit_sha: commitSha,
       body: bodyComment
     });
+
+    core.setOutput('robot-result', bodyComment);
     
   } catch (error) {
     core.setFailed(error.message);
