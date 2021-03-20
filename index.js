@@ -15,7 +15,7 @@ async function init() {
     const artifactClient = artifact.create();
 
     const pr = github.context.payload.pull_request;
-    const client = new github.GitHub(accessToken);
+    const octokit = github.getOctokit(accessToken);
      
     const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName);
     console.log('Download: ', downloadResponse);
@@ -62,7 +62,7 @@ async function init() {
       }
     });
 
-    const response = await client.issues.createComment({
+    const response = await octokit.issues.createComment({
       owner: repositoryOwner,
       repo: repository,
       issue_number: pr.number,
