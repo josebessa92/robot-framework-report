@@ -29,9 +29,9 @@ async function init() {
     bodyComment += ':fire: Failed {{.Failed}} / {{.Total}}\n';
     bodyComment += '### Executed Tests\n';
 
-    let totalCenarios,
-        passedCenarios,
-        failedCenarios = 0;
+    let totalCenarios = 0;
+    let passedCenarios = 0;
+    let failedCenarios = 0;
     
     var parser = new xml2js.Parser();
     parser.parseString(xmlOutput, function (err, result) {
