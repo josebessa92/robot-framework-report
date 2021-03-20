@@ -24,14 +24,10 @@ async function init() {
     // let xmlOutput = await fs.readFile(`./reports/output.xml`, 'utf8');
     console.log('XML lido com sucesso');
 
-    let bodyComment = `
-      ### Summary Results
-      :tada: Passed {{.Passed}} / {{.Total}}
-      :fire: Failed {{.Failed}} / {{.Total}}
-
-      ### Executed Tests
-
-    `;
+    let bodyComment = '### Summary Results\n';
+    bodyComment += ':tada: Passed {{.Passed}} / {{.Total}}\n';
+    bodyComment += ':fire: Failed {{.Failed}} / {{.Total}}\n';
+    bodyComment += '### Executed Tests\n';
 
     var parser = new xml2js.Parser();
     parser.parseString(xmlOutput, function (err, result) {
@@ -42,22 +38,17 @@ async function init() {
         const parentSuiteName = parentSuite.$.name;
         const parentSuiteTestStatus = parentSuite.status[0].$.status;
 
-        bodyComment += `
-          ###### ${parentSuiteName} - ${parentSuiteTestStatus == 'FAIL' ? ':x:' : ':heavy_check_mark:' }
-        `;
+        bodyComment += `###### ${parentSuiteName} - ${parentSuiteTestStatus == 'FAIL' ? ':x:' : ':heavy_check_mark:' }\n`;
         
-        bodyComment += `
-          | Name | Result |
-          | --- | --- |
-        `;
+        bodyComment += '| Name | Result |\n';
+        bodyComment += '| --- | --- |\n';
+
         for (let childSuiteIndex = 0; childSuiteIndex < parentSuite.test.length; childSuiteIndex++) {
           const childSuite = parentSuite.test[childSuiteIndex];
           const childSuiteName = childSuite.$.name;
           const childSuiteTestStatus = childSuite.status[0].$.status;
 
-          bodyComment += `
-            | ${ childSuiteName } | ${ childSuiteTestStatus } |
-          `;
+          bodyComment += `| ${ childSuiteName } | ${ childSuiteTestStatus } |\n`;
         }
       }
     });
