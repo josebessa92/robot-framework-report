@@ -7,15 +7,16 @@ const artifact = require('@actions/artifact');
 
 async function init() {
   try {
-    const commitSha = core.getInput('commit-sha');
     const repository = core.getInput('repository');
     const accessToken = core.getInput('access-token');
     const repositoryOwner = core.getInput('repo-owner');
     const reportArtifactName = core.getInput('report-artifact-name');
     
     const artifactClient = artifact.create();
-    const octokit = github.getOctokit(accessToken);
-    
+
+    const pr = github.context.payload.pull_request;
+    const client = new github.GitHub(accessToken);
+     
     const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName);
     console.log('Download: ', downloadResponse);
     
@@ -61,14 +62,14 @@ async function init() {
       }
     });
 
-    let result = await octokit.repos.createCommitComment({
+    const response = await client.issues.createComment({
       owner: repositoryOwner,
       repo: repository,
-      commit_sha: commitSha,
+      issue_number: pr.number,
       body: bodyComment
     });
 
-    core.setOutput('robot-result', bodyComment);
+    core.setOutput('robot-result', response.data.html_url);
     
   } catch (error) {
     core.setFailed(error.message);
