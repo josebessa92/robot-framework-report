@@ -72,7 +72,7 @@ async function init() {
       body: bodyComment
     });
 
-    core.setOutput('robot-result', response.data.html_url);
+    core.setOutput('robot-result', bodyComment);
     
   } catch (error) {
     core.setFailed(error.message);
