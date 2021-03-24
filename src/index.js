@@ -5,7 +5,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const artifact = require('@actions/artifact');
 
-const clientBucketGCP = require('./client-bucket-gcp');
+const uploadBucketGCP = require('./client-bucket-gcp');
 
 async function init() {
   try {
@@ -28,9 +28,9 @@ async function init() {
     console.log('XML lido com sucesso');
 
     if (bucketGcpName) {
-      console.log('Initializing GCP Storage Uploading...', clientBucketGCP);
+      console.log('Initializing GCP Storage Uploading...', uploadBucketGCP);
       // const storageGcpResponse = await storage.bucket(bucketGcpName).upload(downloadResponse.downloadPath, { destination: `/${bucketGcpName}-${Date.now()}` });
-      const storageGcpResponse = await clientBucketGCP.uploadBucketGCP(`/${bucketGcpName}-${Date.now()}`, downloadResponse.downloadPath, false);
+      const storageGcpResponse = await uploadBucketGCP(`/${bucketGcpName}-${Date.now()}`, downloadResponse.downloadPath, false);
       console.log('Storage GCP Response:', storageGcpResponse);
     }
 

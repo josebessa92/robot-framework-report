@@ -1,7 +1,7 @@
 const fs = require('fs');
-const uploadHelper = require('./upload-helper');
+const { uploadFile, uploadDirectory } = require('./upload-helper');
 
-async function uploadBucketGCP(destination, path, gzip) {
+export default async function uploadBucketGCP(destination, path, gzip) {
     let bucketName = destination;
     let prefix = '';
     // If destination of the form my-bucket/subfolder get bucket and prefix.
@@ -13,10 +13,10 @@ async function uploadBucketGCP(destination, path, gzip) {
 
     const stat = await fs.promises.stat(path);
     if (stat.isFile()) {
-      const uploadedFile = await uploadHelper.uploadFile(bucketName, path, gzip, prefix);
+      const uploadedFile = await uploadFile(bucketName, path, gzip, prefix);
       return [uploadedFile];
     } else {
-      const uploadedFiles = await uploadHelper.uploadDirectory(bucketName, path, gzip, prefix);
+      const uploadedFiles = await uploadDirectory(bucketName, path, gzip, prefix);
       return uploadedFiles;
     }
   } 

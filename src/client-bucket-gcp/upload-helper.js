@@ -21,7 +21,18 @@ async function initializeStorage() {
     return new Storage(options);
 }
 
-async function uploadDirectory(bucketName, directoryPath, gzip, prefix) {
+async function getFiles(directory, fileList) {
+    const items = await fs.promises.readdir(directory);
+    for (const item of items) {
+        const stat = await fs.promises.stat(path.posix.join(directory, item));
+        if (stat.isDirectory())
+            fileList = await getFiles(path.posix.join(directory, item), fileList);
+        else fileList.push(path.posix.join(directory, item));
+    }
+    return fileList;
+}
+
+const uploadDirectory = async (bucketName, directoryPath, gzip, prefix) => {
     const pathDirName = path.posix.dirname(directoryPath);
     // Get list of files in the directory.
     const filesList = await getFiles(directoryPath);
@@ -49,7 +60,7 @@ async function uploadDirectory(bucketName, directoryPath, gzip, prefix) {
     return resp;
 }
 
-async function uploadFile(bucketName, filename, gzip, destination) {
+const uploadFile = async (bucketName, filename, gzip, destination) => {
     let storage = initializeStorage();
 
     const options = { gzip };
@@ -62,13 +73,7 @@ async function uploadFile(bucketName, filename, gzip, destination) {
     return uploadedFile;
 }
 
-async function getFiles(directory, fileList) {
-    const items = await fs.promises.readdir(directory);
-    for (const item of items) {
-        const stat = await fs.promises.stat(path.posix.join(directory, item));
-        if (stat.isDirectory())
-            fileList = await getFiles(path.posix.join(directory, item), fileList);
-        else fileList.push(path.posix.join(directory, item));
-    }
-    return fileList;
+export default {
+    uploadDirectory,
+    uploadFile
 }
