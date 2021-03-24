@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import * as fs from 'fs';
+const fs = require('fs');
 import { uploadFile, uploadDirectory } from './upload-helper';
 
 export async function uploadBucketGCP(destination, path, gzip) {
