@@ -1,8 +1,6 @@
 const { Storage } = require('@google-cloud/storage');
 const path = require('path');
 
-import * as path from 'path';
-
 async function initializeStorage() {
     const options = {
         userAgent: 'github-actions-upload-cloud-storage/0.2.0',
