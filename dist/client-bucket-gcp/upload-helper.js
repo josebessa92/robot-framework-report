@@ -63,12 +63,18 @@ const uploadDirectory = (bucketName, directoryPath, gzip, prefix) => __awaiter(v
 });
 exports.uploadDirectory = uploadDirectory;
 const uploadFile = (bucketName, filename, gzip, destination) => __awaiter(void 0, void 0, void 0, function* () {
-    let storage = initializeStorage();
+    const optionsStorage = {
+        userAgent: 'github-actions-upload-cloud-storage/0.2.0',
+    };
+    let storage = new Storage(optionsStorage);
     const options = { gzip };
     if (destination) {
         // If obj prefix is set, then extract filename and append to prefix.
         options.destination = `${destination}/${path.posix.basename(filename)}`;
     }
+    console.log('Uploading Files...', storage);
+    console.log('Bucket Name...', bucketName);
+    console.log('Filename...', filename);
     const uploadedFile = yield storage.bucket(bucketName).upload(filename, options);
     return uploadedFile;
 });
