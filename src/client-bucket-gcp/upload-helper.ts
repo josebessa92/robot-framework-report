@@ -25,9 +25,9 @@ async function initializeStorage() {
 }
 
 async function getFiles(directory: any, fileList: any[] = []) {
-    const items = await fs.promises.readdir(directory);
+    const items = await fs.readdir(directory);
     for (const item of items) {
-        const stat = await fs.promises.stat(path.posix.join(directory, item));
+        const stat = await fs.stat(path.posix.join(directory, item));
         if (stat.isDirectory())
             fileList = await getFiles(path.posix.join(directory, item), fileList);
         else fileList.push(path.posix.join(directory, item));

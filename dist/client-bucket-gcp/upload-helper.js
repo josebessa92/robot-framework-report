@@ -34,9 +34,9 @@ function initializeStorage() {
 }
 function getFiles(directory, fileList = []) {
     return __awaiter(this, void 0, void 0, function* () {
-        const items = yield fs.promises.readdir(directory);
+        const items = yield fs.readdir(directory);
         for (const item of items) {
-            const stat = yield fs.promises.stat(path.posix.join(directory, item));
+            const stat = yield fs.stat(path.posix.join(directory, item));
             if (stat.isDirectory())
                 fileList = yield getFiles(path.posix.join(directory, item), fileList);
             else

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require('fs');
+const fs = require('fs').promises;
 const upload_helper_1 = require("./upload-helper");
 function uploadBucketGCP(destination, path, gzip) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -21,7 +21,7 @@ function uploadBucketGCP(destination, path, gzip) {
             bucketName = destination.substring(0, idx);
             prefix = destination.substring(idx + 1);
         }
-        const stat = yield fs.promises.stat(path);
+        const stat = yield fs.stat(path);
         if (stat.isFile()) {
             const uploadedFile = yield upload_helper_1.uploadFile(bucketName, path, gzip, prefix);
             return [uploadedFile];
