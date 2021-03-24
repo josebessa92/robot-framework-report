@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { uploadFile, uploadDirectory } = require('./upload-helper');
+const uploadHelper = require('./upload-helper');
 
 async function uploadBucketGCP(destination, path, gzip) {
     let bucketName = destination;
@@ -13,10 +13,10 @@ async function uploadBucketGCP(destination, path, gzip) {
 
     const stat = await fs.promises.stat(path);
     if (stat.isFile()) {
-      const uploadedFile = await uploadFile(bucketName, path, gzip, prefix);
+      const uploadedFile = await uploadHelper.uploadFile(bucketName, path, gzip, prefix);
       return [uploadedFile];
     } else {
-      const uploadedFiles = await uploadDirectory(bucketName, path, gzip, prefix);
+      const uploadedFiles = await uploadHelper.uploadDirectory(bucketName, path, gzip, prefix);
       return uploadedFiles;
     }
   } 
