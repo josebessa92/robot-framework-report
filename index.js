@@ -5,13 +5,17 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const artifact = require('@actions/artifact');
 
+const { Storage } = require('@google-cloud/storage');
+
 async function init() {
   try {
     const repository = core.getInput('repository');
     const accessToken = core.getInput('access-token');
     const repositoryOwner = core.getInput('repo-owner');
     const reportArtifactName = core.getInput('report-artifact-name');
+    const bucketGcpName = core.getInput('bucket-gcp-name');
     
+    const storage = new Storage();
     const artifactClient = artifact.create();
 
     const pr = github.context.payload.pull_request;
@@ -23,6 +27,12 @@ async function init() {
     let xmlOutput = await fs.readFile(`${downloadResponse.downloadPath}/reports/output.xml`, 'utf8');
     // let xmlOutput = await fs.readFile(`./reports/output.xml`, 'utf8');
     console.log('XML lido com sucesso');
+
+    if (bucketGcpName) {
+      console.log('Initializing GCP Storage Uploading...');
+      const storageGcpResponse = await storage.bucket(bucketGcpName).upload(downloadResponse.downloadPath, { destination: `/${bucketGcpName}-${Date.now()}` });
+      console.log('Storage GCP Response:', storageGcpResponse);
+    }
 
     let bodyComment = '### Summary Results\n';
     bodyComment += ':tada: Passed {{.Passed}} / {{.Total}}\n';
