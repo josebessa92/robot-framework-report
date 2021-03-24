@@ -13,6 +13,8 @@ inputs:
   repository: 
     description: 'Repository'
     required: true  
+  bucket-gcp-name: 
+    description: 'Bucket GCP Name'
 outputs:
   robot-result: # id da saída
     description: 'Robot Results'
