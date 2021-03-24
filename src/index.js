@@ -15,7 +15,6 @@ async function init() {
     const reportArtifactName = core.getInput('report-artifact-name');
     const bucketGcpName = core.getInput('bucket-gcp-name');
     
-    const storage = new Storage();
     const artifactClient = artifact.create();
 
     const pr = github.context.payload.pull_request;
