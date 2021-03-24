@@ -3,24 +3,18 @@ const xml2js = require('xml2js');
 
 const core = require('@actions/core');
 const github = require('@actions/github');
-const artifact = require('@actions/artifact');
 
 async function init() {
   try {
     const repository = core.getInput('repository');
+    const reportPath = core.getInput('report-path');
     const accessToken = core.getInput('access-token');
     const repositoryOwner = core.getInput('repo-owner');
-    const reportArtifactName = core.getInput('report-artifact-name');
-    
-    const artifactClient = artifact.create();
 
     const pr = github.context.payload.pull_request;
     const octokit = github.getOctokit(accessToken);
-     
-    // const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName);
-    // console.log('Download: ', downloadResponse);
     
-    let xmlOutput = await fs.readFile(`${reportArtifactName}/output.xml`, 'utf8');
+    let xmlOutput = await fs.readFile(`${reportPath}/output.xml`, 'utf8');
     // let xmlOutput = await fs.readFile(`./reports/output.xml`, 'utf8');
     console.log('XML lido com sucesso');
 
