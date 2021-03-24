@@ -17,10 +17,10 @@ async function init() {
     const pr = github.context.payload.pull_request;
     const octokit = github.getOctokit(accessToken);
      
-    const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName);
-    console.log('Download: ', downloadResponse);
+    // const downloadResponse = await artifactClient.downloadArtifact(reportArtifactName);
+    // console.log('Download: ', downloadResponse);
     
-    let xmlOutput = await fs.readFile(`${downloadResponse.downloadPath}/reports/output.xml`, 'utf8');
+    let xmlOutput = await fs.readFile(`${reportArtifactName}/output.xml`, 'utf8');
     // let xmlOutput = await fs.readFile(`./reports/output.xml`, 'utf8');
     console.log('XML lido com sucesso');
 
