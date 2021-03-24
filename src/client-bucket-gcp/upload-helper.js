@@ -1,4 +1,6 @@
-import { Storage } from '@google-cloud/storage';
+const { Storage } = require('@google-cloud/storage');
+const path = require('path');
+
 import * as path from 'path';
 
 async function initializeStorage() {
