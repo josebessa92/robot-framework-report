@@ -23,7 +23,7 @@ async function initializeStorage() {
     return new Storage(options);
 }
 
-export async function uploadDirectory(bucketName, directoryPath, gzip, prefix) {
+async function uploadDirectory(bucketName, directoryPath, gzip, prefix) {
     const pathDirName = path.posix.dirname(directoryPath);
     // Get list of files in the directory.
     const filesList = await getFiles(directoryPath);
@@ -51,7 +51,7 @@ export async function uploadDirectory(bucketName, directoryPath, gzip, prefix) {
     return resp;
 }
 
-export async function uploadFile(bucketName, filename, gzip, destination) {
+async function uploadFile(bucketName, filename, gzip, destination) {
     let storage = initializeStorage();
 
     const options = { gzip };

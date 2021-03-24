@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { uploadFile, uploadDirectory } = require('./upload-helper');
 
-export async function uploadBucketGCP(destination, path, gzip) {
+async function uploadBucketGCP(destination, path, gzip) {
     let bucketName = destination;
     let prefix = '';
     // If destination of the form my-bucket/subfolder get bucket and prefix.
