@@ -38,15 +38,16 @@ async function init() {
 
         bodyComment += `##### ${parentSuiteName} ${parentSuiteTestStatus == 'FAIL' ? ':x:' : ':heavy_check_mark:' }\n`;
         
-        bodyComment += '| Name | Result |\n';
-        bodyComment += '| --- | --- |\n';
+        bodyComment += '| Name | Message | Status |\n';
+        bodyComment += '| --- | --- | --- |\n';
 
         for (let childSuiteIndex = 0; childSuiteIndex < parentSuite.test.length; childSuiteIndex++) {
           const childSuite = parentSuite.test[childSuiteIndex];
           const childSuiteName = childSuite.$.name;
+          const childSuiteMessage = childSuite.status[0]._;
           const childSuiteTestStatus = childSuite.status[0].$.status;
           
-          bodyComment += `| ${ childSuiteName } | ${ childSuiteTestStatus } ${childSuiteTestStatus == 'FAIL' ? ':x:' : ':heavy_check_mark:' } |\n`;
+          bodyComment += `| ${ childSuiteName } | ${childSuiteMessage == undefined ? '' : childSuiteMessage } | ${ childSuiteTestStatus } ${childSuiteTestStatus == 'FAIL' ? ':x:' : ':heavy_check_mark:' } |\n`;
           
           childSuiteTestStatus == 'PASS' ? passedCenarios++ : failedCenarios++;
           totalCenarios++;
